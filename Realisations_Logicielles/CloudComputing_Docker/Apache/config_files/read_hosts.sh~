@@ -1,0 +1,28 @@
+#!/bin/bash
+
+
+
+# détermination de l'ip de la vm_apache
+cd /tmp/;
+cat /etc/hosts | grep "vm_apache$" > apache_ip_host;
+readarray tab_apache_ip_host < apache_ip_host;
+
+
+for line in "${tab_apache_ip_host[@]}"
+    do
+
+
+ 	OIFS="$IFS";
+	line1=${line//[[:blank:]]/\*};
+	echo "$str1";
+	IFS='* ';
+	read -a tab_apache_host_name <<< $(echo "$line1");
+	IFS="$OIFS";
+	
+echo "Le serveur s'est lancé avec succès. \n L'adresse IP que vous devez saisir dans votre navigateur est $tab_apache_host_name[0]";
+
+done
+
+
+#lancement du bash
+/bin/bash;

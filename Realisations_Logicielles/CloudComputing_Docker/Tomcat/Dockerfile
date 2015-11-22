@@ -1,0 +1,39 @@
+############################################################
+# Dockerfile to build Tomcat container image
+# Based on Ubuntu
+############################################################
+
+# Set the base image to Ubuntu
+FROM ubuntu
+
+# File Author / Maintainer
+MAINTAINER  groupe_phoenix
+
+RUN apt-get update
+
+RUN  apt-get -y install libtomcat7-java
+
+RUN  apt-get install -y tomcat7 \
+&& rm -R -f /tmp/
+
+
+ADD config_files /tmp/
+
+RUN cd /tmp/ \
+&&  apt-get -y install curl \
+&&   curl -L  "https://drive.google.com/uc?export=download&id=0B5agoNPmSuBzUzNmUERXazZTb0U"  >  Annuaire.war \
+&&  mv -f server.xml /var/lib/tomcat7/conf/ \
+&&  mv -f tomcat7 /etc/default/ \
+&&  mv -f Annuaire.war /var/lib/tomcat7/webapps/
+
+RUN apt-get -y install libmysql-java \
+&& ln -sf /usr/share/java/mysql.jar /usr/share/tomcat7/lib/mysql.jar 
+
+
+
+EXPOSE 8009
+EXPOSE 8080
+
+ENTRYPOINT /tmp/tomcat.sh
+
+
